@@ -1,0 +1,90 @@
+body {
+  background-color: #ceced6;
+  font-size: 1.6rem;
+  font-family: "Open Sans", sans-serif;
+  color: #2b3e51;
+}
+
+h2 {
+  font-weight: 300;
+  text-align: center;
+}
+
+a,
+a:link,
+a:visited,
+a:active {
+  color: #3ca9e2;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+a:focus, a:hover,
+a:link:focus,
+a:link:hover,
+a:visited:focus,
+a:visited:hover,
+a:active:focus,
+a:active:hover {
+  color: #329dd5;
+}
+
+.login-form-wrap {
+  background-color: #c5bfbf;
+  width: 70%;
+  max-width: 400px;
+  margin: 110px auto;
+  text-align: center;
+  padding: 70px 0;
+  border-radius: 10px; /* Aumentado o raio da borda para uma aparência mais arredondada */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Suavizando a sombra */
+}
+
+.login-form {
+  padding: 0 40px; 
+}
+
+input[type="password"],
+input[type="email"] {
+  width: calc(100% - 22px); 
+  padding: 10px;
+  margin: 10px 0;
+  color: #8a8b8e;
+  border: 1px solid #c2c0ca;
+  font-style: normal;
+  font-size: 16px;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.2s ease; /* Adicionando transição para a cor da borda */
+}
+
+input[type="password"]:focus,
+input[type="email"]:focus {
+  border-color: #3ca9e2;
+}
+
+.btn-login {
+  border: none;
+  background-color: #0f161a;
+  color: #fff;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s ease; /* Adicionando transição para a cor de fundo */
+  font-size: 18px;
+  width: 100%;
+  padding: 15px;
+  border-radius: 10px;
+}
+.btn-login:hover {
+  background-color: #293e49;
+}
+a {
+border-top: 10px;
+  padding: 8px 12px;
+   font-size: 19px; 
+  text-decoration: none; /* Remover sublinhado padrão */
+}
+
+a:hover {
+  background-color: #20282c;
+}
