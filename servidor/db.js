@@ -1,10 +1,16 @@
+// db.js
+
 const mysql = require("mysql");
 
-const db = mysql.createConnection({
+// Configuração do banco de dados
+const dbConfig = {
     host: "localhost",
     user: "root",
     password: "simple41",
     database: "crud"
-});
+};
 
-module.exports = { db };
+// Criar uma conexão com o banco de dados
+const connection = mysql.createConnection(dbConfig);
+
+module.exports = { connection };

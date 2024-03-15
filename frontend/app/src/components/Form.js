@@ -1,88 +1,113 @@
-import axios from "axios";
-import React, { useEffect, useRef } from "react";
-import { toast } from "react-toastify";
-import "./styles.css"; // Importe o arquivo CSS
+import React, { useState } from 'react';
+import axios from 'axios';
+import styled from 'styled-components';
+import Alert from 'react-bootstrap/Alert';
 
-const Form = ({ getUsers, onEdit, setOnEdit }) => {
-  const ref = useRef();
+const FormContainer = styled.form`
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  margin: 0 auto;
+`;
 
-  useEffect(() => {
-    if (onEdit) {
-      const user = ref.current;
+const Label = styled.label`
+  margin-bottom: 5px;
+`;
 
-      user.nome.value = onEdit.nome;
-      user.email.value = onEdit.email;
-      user.fone.value = onEdit.fone;
-      user.data_nascimento.value = onEdit.data_nascimento;
-    }
-  }, [onEdit]);
+const Input = styled.input`
+  margin-bottom: 10px;
+  padding: 8px;
+`;
+
+const Button = styled.button`
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  background-color: #2c73d2;
+  color: white;
+`;
+
+const Form = () => {
+  const [formData, setFormData] = useState({
+    nome: '',
+    email: '',
+    telefone: '',
+    dataNascimento: ''
+  });
+  const [showAlert, setShowAlert] = useState(false); // Estado para controlar a exibição do alerta
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const user = ref.current;
-
-    if (
-      !user.nome.value ||
-      !user.email.value ||
-      !user.fone.value ||
-      !user.data_nascimento.value
-    ) {
-      return toast.warn("Preencha todos os campos!");
+    try {
+      await axios.post('http://localhost:3003/addUser', formData); // Corrigido
+      setShowAlert(true); // Exibir o alerta de sucesso
+      // Limpar o formulário após a submissão
+      setFormData({
+        nome: '',
+        email: '',
+        telefone: '',
+        dataNascimento: ''
+      });
+    } catch (error) {
+      console.error('Erro ao adicionar usuário:', error);
+      setShowAlert(false); // Esconder o alerta de sucesso, se estiver sendo exibido
     }
-
-    if (onEdit) {
-      await axios
-        .put("http://localhost:8800/" + onEdit.id, {
-          nome: user.nome.value,
-          email: user.email.value,
-          fone: user.fone.value,
-          data_nascimento: user.data_nascimento.value,
-        })
-        .then(({ data }) => toast.success(data))
-        .catch(({ data }) => toast.error(data));
-    } else {
-      await axios
-        .post("http://localhost:8800", {
-          nome: user.nome.value,
-          email: user.email.value,
-          fone: user.fone.value,
-          data_nascimento: user.data_nascimento.value,
-        })
-        .then(({ data }) => toast.success(data))
-        .catch(({ data }) => toast.error(data));
-    }
-
-    user.nome.value = "";
-    user.email.value = "";
-    user.fone.value = "";
-    user.data_nascimento.value = "";
-
-    setOnEdit(null);
-    getUsers();
   };
 
   return (
-    <form ref={ref} onSubmit={handleSubmit} className="form-container">
-      <div className="input-area">
-        <label className="label">Nome</label>
-        <input name="nome" className="input" />
-      </div>
-      <div className="input-area">
-        <label className="label">E-mail</label>
-        <input name="email" type="email" className="input" />
-      </div>
-      <div className="input-area">
-        <label className="label">Telefone</label>
-        <input name="fone" className="input" />
-      </div>
-      <div className="input-area">
-        <label className="label">Data de Nascimento</label>
-        <input name="data_nascimento" type="date" className="input" />
-      </div>
+    <FormContainer onSubmit={handleSubmit}>
+      <Label>Nome:</Label>
+      <Input
+        type="text"
+        name="nome"
+        value={formData.nome}
+        onChange={handleChange}
+        required
+      />
 
-      <button type="submit" className="button">SALVAR</button>
-    </form>
+      <Label>E-mail:</Label>
+      <Input
+        type="email"
+        name="email"
+        value={formData.email}
+        onChange={handleChange}
+        required
+      />
+
+      <Label>Telefone:</Label>
+      <Input
+        type="tel"
+        name="telefone"
+        value={formData.telefone}
+        onChange={handleChange}
+        required
+      />
+
+      <Label>Data de Nascimento:</Label>
+      <Input
+        type="date"
+        name="dataNascimento"
+        value={formData.dataNascimento}
+        onChange={handleChange}
+        required
+      />
+
+      <Button type="submit">Adicionar Usuário</Button>
+
+      {/* Exibir o alerta de sucesso se showAlert for true */}
+      {showAlert && (
+        <Alert variant="success" onClose={() => setShowAlert(false)} dismissible>
+          Usuário adicionado com sucesso!
+        </Alert>
+      )}
+    </FormContainer>
   );
 };
 

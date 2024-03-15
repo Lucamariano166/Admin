@@ -1,54 +1,37 @@
-import React from "react";
-import axios from "axios";
-import { FaTrash, FaEdit } from "react-icons/fa";
-import { toast } from "react-toastify";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const Grid = ({ users, setUsers, setOnEdit }) => {
-  const handleEdit = (item) => {
-    setOnEdit(item);
-  };
+const Grid = () => {
+  const [users, setUsers] = useState([]);
 
-  const handleDelete = async (id) => {
-    await axios
-      .delete("http://localhost:8800/" + id)
-      .then(({ data }) => {
-        const newArray = users.filter((user) => user.id !== id);
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get('http://localhost:3003/getUsers');
+        setUsers(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar usuários:', error);
+      }
+    };
 
-        setUsers(newArray);
-        toast.success(data);
-      })
-      .catch(({ data }) => toast.error(data));
-
-    setOnEdit(null);
-  };
+    fetchUsers();
+  }, []);
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Email</th>
-          <th>Fone</th>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {users.map((item, i) => (
-          <tr key={i}>
-            <td>{item.nome}</td>
-            <td>{item.email}</td>
-            <td>{item.fone}</td>
-            <td>
-              <FaEdit onClick={() => handleEdit(item)} />
-            </td>
-            <td>
-              <FaTrash onClick={() => handleDelete(item.id)} />
-            </td>
-          </tr>
+    <div>
+      <h2>Lista de Usuários</h2>
+      <ul>
+        {users.map(user => (
+          <li key={user.id}>
+            <strong>Nome:</strong> {user.nome}<br />
+            <strong>Email:</strong> {user.email}<br />
+            <strong>Telefone:</strong> {user.fone}<br />
+            <strong>Data de Nascimento:</strong> {user.data_nascimento}<br />
+            <br />
+          </li>
         ))}
-      </tbody>
-    </table>
+      </ul>
+    </div>
   );
 };
 

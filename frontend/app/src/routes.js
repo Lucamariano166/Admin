@@ -13,7 +13,7 @@ const RoutesComponent = () => {
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/form" element={<Form />} />
-                <Route path="/form" element={<Grid />} />
+                <Route path="/grid" element={<Grid />} /> {/* Adicionado rota para o componente Grid */}
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </BrowserRouter>
